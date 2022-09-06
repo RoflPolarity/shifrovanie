@@ -3,10 +3,11 @@ import java.util.List;
 
 public class RussianAlphabet {
     private List<Character> alph = new ArrayList<>();
-    private char[] alphArray = {'а','б','в','г','д','е','ё','ж','з','и','й','к',
-            'л','м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я'};
+    private String alphArray = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя";
 
-    RussianAlphabet(){for (char c : alphArray) {alph.add(c);}}
+    RussianAlphabet(){
+        for (int i = 0; i< alphArray.length();i++)alph.add(alphArray.charAt(i));
+    }
 
     public int getNum(char elem){return alph.indexOf(elem);}
 
