@@ -1,24 +1,17 @@
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicReference;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
+import javafx.scene.control.*;
 
 import javax.swing.*;
 
 public class controller {
 
-    @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
 
     @FXML
     private Button decode;
@@ -30,7 +23,7 @@ public class controller {
     private TextField filePath;
 
     @FXML
-    private TextField key;
+    private TextField keyField;
 
     @FXML
     private Button keyGen;
@@ -39,13 +32,23 @@ public class controller {
     private Button obzor;
 
     @FXML
-    void initialize() throws IOException {
-        AtomicReference<Thread> JFS = new AtomicReference<>();
+    private TextArea text;
+
+    @FXML
+    void initialize(){
         final String[] FilePath = new String[1];
+        final String[] key = new String[1];
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (keyField.getText().equals(""))key[0]="";
+                System.out.println(key[0]);
+            }
+        },0,1000);
         obzor.setOnAction(event -> {
             Task<Void> task = new Task<Void>(){
                 protected Void call() {
-                    System.out.println("1");
                     JFrame frame = new JFrame();
                     JFileChooser JFC = new JFileChooser();
                     JFC.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -55,27 +58,73 @@ public class controller {
                         try {
                             filePath.setText(new String(JFC.getSelectedFile().getAbsolutePath().getBytes(), "windows-1251"));
                             FilePath[0] = JFC.getSelectedFile().getAbsolutePath();
-                        } catch (UnsupportedEncodingException e) {
+                            FileReader fr = new FileReader(JFC.getSelectedFile());
+                            BufferedReader br = new BufferedReader(fr);
+                            StringBuilder res = new StringBuilder();
+                            String line;
+                            while ((line = br.readLine())!=null){
+                                res.append(line).append("\n");
+                            }
+                            text.setText(new String(res.toString().getBytes(), StandardCharsets.UTF_8));
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
                     return null;
                 }
             };
-            JFS.set(new Thread(task));
-            JFS.get().start();
+                new Thread(task).start();
             });
+            keyGen.setOnAction(event -> {
+                Task<Void> task = new Task<Void>(){
+                    @Override
+                    protected Void call(){
+                        key[0] = KeyGeneration();
+                        keyField.setText(key[0]);
+                        return null;
+                    }
+                };
+                new Thread(task).start();
+            });
+
         encode.setOnAction(event -> {
             Task<Void> task = new Task<Void>() {
                 @Override
                 protected Void call() throws Exception {
-                    encode encode = new encode(FilePath[0],"DOG");
-                    encode.save();
+                    if (FilePath[0].equals("")){
+                        String warning = "Íå âûáğàí ôàéë";
+                        Alert alert = new Alert(Alert.AlertType.ERROR, new String(warning.getBytes(),StandardCharsets.UTF_8));
+                        alert.showAndWait();
+                    }else if (key[0].equals("")){
+                        String warning = "Íå ñãåíåğèğîâàí êëş÷. \nÑãåíåğèğîâàòü êëş÷ àâòîìàòè÷åñêè?";
+                        Alert alert = new Alert(Alert.AlertType.WARNING, new String(warning.getBytes(),StandardCharsets.UTF_8), ButtonType.YES, ButtonType.NO);
+                        alert.showAndWait();
+                        System.out.println("2");
+                        if (alert.getResult()==ButtonType.YES){
+                            encode encode = new encode(FilePath[0],KeyGeneration());
+                            encode.save();
+                        }
+                    }else {
+                        System.out.println("3");
+                        encode encode = new encode(FilePath[0],key[0]);
+                        encode.save();
+                    }
+
                     return null;
                 }
             };
             new Thread(task).start();
         });
 
+        }
+
+        private String KeyGeneration(){
+            String alphabet = "ÀÁÂÃÄÅ¨ÈÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖ×ØÙÚÛÜİŞßABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890\"'?;,.:-!";
+            StringBuilder sb = new StringBuilder();
+            Random random = new Random();
+            for (int i = 0; i < 10; i++) {
+                sb.append(alphabet.charAt(random.nextInt(alphabet.length())));
+            }
+            return sb.toString();
         }
     }

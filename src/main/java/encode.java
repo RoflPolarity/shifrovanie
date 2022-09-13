@@ -23,18 +23,10 @@ public class encode {
         String username = System.getProperty("user.name");
         this.encodingFile = new File("C:\\Users\\" + username +"\\Desktop\\coded.txt");
         for (int i = 0; i < text.length(); i++) {
-            if (finder(text.charAt(i))==-1){
-                numsOfText[i] = -1;
-            }else{
-                numsOfText[i] = finder(text.charAt(i));
-            }
+            numsOfText[i] = finder(text.charAt(i));
         }
         for (int i = 0; i < key.length(); i++) {
-            if (finder(key.charAt(i))==-1){
-                numsOfKey[i] = -1;
-            }else{
-                numsOfKey[i] = finder(key.charAt(i));
-            }
+            numsOfKey[i] = finder(key.charAt(i));
         }
         StringBuilder sb = new StringBuilder();
         int j = 0;
@@ -47,16 +39,11 @@ public class encode {
     }
 
     private int finder(char c){
-        for (int i = 0; i < alphabet.length(); i++) {
-            if (alphabet.charAt(i)==c){
-                return i+1;
-            }else{
-                if (alphabet.toLowerCase().charAt(i)==c){
-                    return i+1;
-                }
-            }
+        try {
+            return text.indexOf(c);
+        }catch (Exception e){
+            return text.toLowerCase().indexOf(c);
         }
-        return alphabet.indexOf('?');
     }
 
 
@@ -78,8 +65,5 @@ public class encode {
             res.append(line);
         }
         return new String(res.toString().getBytes(), StandardCharsets.UTF_8);
-    }
-
-    public static void main(String[] args) throws IOException {
     }
 }
