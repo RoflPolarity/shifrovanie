@@ -8,7 +8,7 @@ public class encode {
     int [] numsOfKey;
     String text, codedString, key;
     encode(String pathFile, String key) throws IOException {
-        this.encodingFile = new File("coded.txt");
+
         alphabet = new String(alphabet.getBytes(),"windows-1251");
         file = new File(pathFile);
         this.text = read(file);
@@ -20,6 +20,8 @@ public class encode {
 
 
     private String code(){
+        String username = System.getProperty("user.name");
+        this.encodingFile = new File("C:\\Users\\" + username +"\\Desktop\\coded.txt");
         for (int i = 0; i < text.length(); i++) {
             if (finder(text.charAt(i))==-1){
                 numsOfText[i] = -1;
@@ -79,6 +81,5 @@ public class encode {
     }
 
     public static void main(String[] args) throws IOException {
-        new encode("C:\\Users\\RoflPolarity\\IdeaProjects\\shifrovanie\\src\\main\\java\\mumu", "DOG");
     }
 }
