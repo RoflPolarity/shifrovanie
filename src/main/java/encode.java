@@ -1,57 +1,84 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
 
 public class encode {
     File file, encodingFile;
-    int bias,letters;
-    encode(final int bias, final int letters, String pathFile) throws IOException {
-        this.bias = bias;
-        this.letters = letters;
+    String alphabet = "¿¡¬√ƒ≈®»∆«»… ÀÃÕŒœ–—“”‘’÷◊ÿŸ⁄€‹›ﬁﬂABCDEFGHIJKLMNOPQRSTUVWXYZ 1234567890\"'?;,.:-!";
+    int [] numsOfText;
+    int [] numsOfKey;
+    String text, codedString, key;
+    encode(String pathFile, String key) throws IOException {
+        this.encodingFile = new File("coded.txt");
+        alphabet = new String(alphabet.getBytes(),"windows-1251");
         file = new File(pathFile);
-        encodingFile = new File("Coded_Mumu.txt");
-        System.out.println(encrypt(read(),"œË‚ÂÚ"));
-        save();
+        this.text = read(file);
+        numsOfText = new int[text.length()];
+        numsOfKey = new int[key.length()];
+        this.key = key;
+        this.codedString = code();
     }
+
+
+    private String code(){
+        for (int i = 0; i < text.length(); i++) {
+            if (finder(text.charAt(i))==-1){
+                numsOfText[i] = -1;
+            }else{
+                numsOfText[i] = finder(text.charAt(i));
+            }
+        }
+        for (int i = 0; i < key.length(); i++) {
+            if (finder(key.charAt(i))==-1){
+                numsOfKey[i] = -1;
+            }else{
+                numsOfKey[i] = finder(key.charAt(i));
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        int j = 0;
+        for (int i = 0; i < numsOfText.length; i++) {
+            if (j==key.length()) j = 0;
+            sb.append(alphabet.charAt((numsOfText[i]+numsOfKey[j])% alphabet.length()));
+            j++;
+        }
+        return new String(sb.toString().getBytes(),StandardCharsets.UTF_8);
+    }
+
+    private int finder(char c){
+        for (int i = 0; i < alphabet.length(); i++) {
+            if (alphabet.charAt(i)==c){
+                return i+1;
+            }else{
+                if (alphabet.toLowerCase().charAt(i)==c){
+                    return i+1;
+                }
+            }
+        }
+        return alphabet.indexOf('?');
+    }
+
 
     public void save() throws IOException {
         if (!encodingFile.exists()){
             encodingFile.createNewFile();
         }
-
-
+        FileWriter fw = new FileWriter(encodingFile);
+        fw.write(codedString);
+        fw.flush();
+        fw.close();
     }
 
-    public String encrypt(String text ,String key) {
-        String encrypt = "";
-        final int keyLen = key.length();
-        for (int i = 0, len = text.length(); i < len; i++) {
-            encrypt += (char) (((text.charAt(i) + key.charAt(i % keyLen) - 2 * this.bias) % this.letters) + this.bias);
-        }
-        return encrypt;
-    }
-
-    public String decrypt(String cipher, final String key) {
-        String decrypt = "";
-        final int keyLen = key.length();
-        for (int i = 0, len = cipher.length(); i < len; i++) {
-            decrypt += (char) (((cipher.charAt(i) - key.charAt(i % keyLen) + this.letters) % this.letters) + this.bias);
-        }
-        return decrypt;
-    }
-
-    private String read() throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(new File("C:\\Users\\RoflPolarity\\IdeaProjects\\shifrovanie\\src\\main\\java\\mumu")));
-        List<String> lst = new ArrayList<>();
+    private String read(File file) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(file));
         StringBuilder res = new StringBuilder();
         String line;
         while ((line = reader.readLine())!=null){
             res.append(line);
         }
-        return res.toString();
+        return new String(res.toString().getBytes(), StandardCharsets.UTF_8);
     }
 
     public static void main(String[] args) throws IOException {
-        new encode(1072,33, "C:\\Users\\RoflPolarity\\IdeaProjects\\shifrovanie\\src\\main\\java\\mumu.txt");
+        new encode("C:\\Users\\RoflPolarity\\IdeaProjects\\shifrovanie\\src\\main\\java\\mumu", "DOG");
     }
 }
