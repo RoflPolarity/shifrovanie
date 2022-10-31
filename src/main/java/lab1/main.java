@@ -1,3 +1,5 @@
+package lab1;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,8 +20,8 @@ public class main extends Application {
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("/main.fxml"));
         primaryStage.setTitle("");
-        primaryStage.setX(Toolkit.getDefaultToolkit().getScreenSize().width/2);
-        primaryStage.setY(Toolkit.getDefaultToolkit().getScreenSize().height/2);
+        primaryStage.setX(Toolkit.getDefaultToolkit().getScreenSize().width/2.0);
+        primaryStage.setY(Toolkit.getDefaultToolkit().getScreenSize().height/2.0);
         primaryStage.setScene(new Scene(root, 600, 400));
         primaryStage.setResizable(false);
         primaryStage.show();
