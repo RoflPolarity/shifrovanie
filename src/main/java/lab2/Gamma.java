@@ -11,26 +11,7 @@ public class Gamma {
     static Scanner scanner = new Scanner(System.in);
     static String username = System.getProperty("user.name");
     static File key = new File("C:\\Users\\" + username +"\\Desktop\\gamma.key");
-    static File text = new File("C:\\Users\\RoflPolarity\\IdeaProjects\\shifrovanie\\src\\main\\java\\lab2\\text.txt");
 
-    public static void main(String[] args) throws IOException {
-
-        while (true){
-            print();
-            if (scanner.nextInt()==1) saveParam();
-            else if(scanner.nextInt()==2)crypt();
-            else if (scanner.nextInt()==3);
-            else if (scanner.nextInt()==4) break;
-        }
-    }
-
-
-    public static void print(){
-        System.out.println("1.Сгенерировать параметры для линейного конгруэнтного ГПСЧ и сохранить их в файл.\n"+
-                "2.Выполнить шифрование гаммированием выбранного файла с использованием файла-ключа"+
-                "3."+
-                "4.");
-    }
     static void saveParam() throws IOException {
         gspch = new GSPCH();
         FileWriter fw = new FileWriter(key);
@@ -49,7 +30,8 @@ public class Gamma {
             }else System.out.println("Операция отменена.");
         }
     }
-    static void crypt() throws IOException {
+    public static void crypt(String file) throws IOException {
+        File text = new File(file);
         FileReader fr = new FileReader(text);
         List<String> lst = new ArrayList<>();
         BufferedReader br = new BufferedReader(fr);
