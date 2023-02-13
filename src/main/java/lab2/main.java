@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Objects;
 
 public class main extends Application {
 
@@ -17,7 +18,7 @@ public class main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/lab2.fxml"));
+        Parent root = FXMLLoader.load((getClass().getResource("/lab2.fxml")));
         primaryStage.setTitle("");
         primaryStage.setX(Toolkit.getDefaultToolkit().getScreenSize().width/2.0);
         primaryStage.setY(Toolkit.getDefaultToolkit().getScreenSize().height/2.0);

@@ -13,12 +13,6 @@ import javax.swing.*;
 public class controller {
 
     @FXML
-    private RadioButton English;
-
-    @FXML
-    private RadioButton Russian;
-
-    @FXML
     private Button decode;
 
     @FXML
@@ -48,7 +42,7 @@ public class controller {
             public void run() {
                 if (keyField.getText().equals(""))key[0]="";
                 else key[0] = keyField.getText();
-                if (!keyField.getText().equals("")&!filePath.getText().equals("")&&Russian.isSelected()||English.isSelected()) encode.setDisable(false);
+                if (!keyField.getText().equals("")&!filePath.getText().equals("")) encode.setDisable(false);
             }
         },0,100);
         obzor.setOnAction(event -> {
@@ -83,16 +77,14 @@ public class controller {
 
             encode.setOnAction(event -> {
             try {
-                String language = Russian.isSelected() ? Russian.getText() : English.getText();
-                new encode(filePath.getText(),key[0], language);
+                new encode(filePath.getText(),key[0]);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
             decode.setOnAction(event -> {
                 try {
-                    String language = Russian.isSelected() ? Russian.getText() : English.getText();
-                    new decode(filePath.getText(),key[0], language);
+                    new decode(filePath.getText(),key[0]);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

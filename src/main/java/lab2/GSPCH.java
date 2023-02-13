@@ -66,7 +66,7 @@ public class GSPCH {
         int[] arr = new int[num];
         cLast = (a*c0+b)%m;
         for (int i = 0; i < num; i++) {
-            arr[i] = (int) ((a*cLast+b)%m);
+            arr[i] = Math.abs((int) ((a*cLast+b)%m));
             cLast = arr[i];
             }
         return arr;
@@ -76,7 +76,7 @@ public class GSPCH {
         List<Long> counters = new ArrayList<>();
         List<Long> lst = new ArrayList<>();
         String username = System.getProperty("user.name");
-        File file = new File("C:\\Users\\" + username +"\\Desktop\\nums.txt");
+        File file = new File("/home/"+username+"/Р Р°Р±РѕС‡РёР№ СЃС‚РѕР»/nums.txt");
         FileWriter fw = new FileWriter(file);
 
 
@@ -138,9 +138,9 @@ public class GSPCH {
 
     private JFreeChart createChart(CategoryDataset dataset){
         JFreeChart chart = ChartFactory.createBarChart(
-                "Распределение чисел",
-                "От 0 до (m-1)",
-                "Кол-во попаданий",
+                "Р Р°СЃРїСЂРµРґРµР»РµРЅРёРµ С‡РёСЃРµР»",
+                "РћС‚ 0 РґРѕ (m-1)",
+                "РљРѕР»-РІРѕ РїРѕРїР°РґР°РЅРёР№",
                 dataset);
         chart.setBackgroundPaint(Color.white);
 
@@ -164,8 +164,14 @@ public class GSPCH {
         return dataset;
     }
 
+    public void setParam(long A, long B, long C0){
+        this.a = A;
+        this.b = B;
+        this.c0 = C0;
+    }
+
     public static void main(String[] args) throws IOException {
         GSPCH gspch = new GSPCH();
-        gspch.getRandToFile(10000);
+        gspch.getRandToFile(1000);
     }
 }
